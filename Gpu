@@ -1,7 +1,7 @@
 # GPU Detection - Begin (EXPERIMENTAL!)
 detectgpu () {
   gpus=($(lspci -mm | awk -F '\\"|\\" \\"' '/"Display|"3D|"VGA/ {print $3 " " $4}'))
-  
+
  # Number the GPUs if more than one exists.
   ((${#gpus[@]} > 1)) && gpu_num=1
   for gpu in "${gpus[@]}"; do
@@ -38,13 +38,7 @@ detectgpu () {
       ;;
   esac
 
-  if [[ "$gpu_brand" == "off" ]]; then
-      gpu="${gpu/AMD }"
-      gpu="${gpu/NVIDIA }"
-      gpu="${gpu/Intel }"
-  fi
-
-  echo "${subtitle}${gpu_num}" "$gpu"
+  echo "${gpu_num}" "$gpu"
   ((++gpu_num))
 done
 
