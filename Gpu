@@ -1,0 +1,5 @@
+# GPU Detection - Begin (EXPERIMENTAL!)
+detectgpu () {
+	lspci -mm | awk -F '\\"|\\" \\"' '/"Display|"3D|"VGA/ {print $3 " " $4}'
+}
+# GPU Detection - End
