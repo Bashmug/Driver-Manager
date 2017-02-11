@@ -1,44 +1,41 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-# import gtk
 
-class MainWindow(Gtk.Window):
+class Start_Window(Gtk.Window):
+
     def __init__(self):
-        Gtk.Window.__init__(self, title="Driver Manager") #title
+        Gtk.Window.__init__(self,title="Antergos Driver Manager") # defining the title
         self.set_border_width(10)
+        self.set_default_size(600, 400)
 
-        #self.notebook = Gtk.Notebook()
-        #self.set_default_size(500, 300)
-        #self.notebook.set_tab_pos(gtk.POS_TOP)
-        #self.add(self.notebook)
-        hbox = Gtk.Box(spacing=6)
-        self.add(hbox)
 
-        button1 = Gtk.RadioButton.new_with_label_from_widget(None, "Button 1")
-        button1.connect("toggled", self.on_button_toggled, "1")
-        hbox.pack_start(button1, False, False, 0)
+        self.connect('delete-event', Gtk.main_quit)
+        icontheme = Gtk.IconTheme.get_default()
+        self.icon = icontheme.load_icon(Gtk.STOCK_FLOPPY, 128, 0)
+        self.set_icon(self.icon)
 
-        button2 = Gtk.RadioButton.new_from_widget(button1)
-        button2.set_label("Button 2")
-        button2.connect("toggled", self.on_button_toggled, "2")
-        hbox.pack_start(button2, False, False, 0)
+        # starting with notebook  from here
+        self.notebook = Gtk.Notebook()
+        self.add(self.notebook)
+        self.notebook.set_tab_pos(Gtk.PositionType.LEFT) # this part helped by elya5 on stackoverflow
+        # nvidia Page / graphic driver later add AMD and others too
+        self.page1 = Gtk.Box()
+        self.page1.set_border_width(10)
+        self.notebook.append_page(self.page1, Gtk.Label('Graphic Driver'))
+        self.page1.add(Gtk.Label('Nvidia'))
 
-        button3 = Gtk.RadioButton.new_with_mnemonic_from_widget(button1,
-            "B_utton 3")
-        button3.connect("toggled", self.on_button_toggled, "3")
-        hbox.pack_start(button3, False, False, 0)
+        self.page2 = Gtk.Box()
+        self.page2.set_border_width(10)
+        #self.notebook.append_page(self.page2,Gtk.Image.new_from_icon_name("wifi",Gtk.IconSize.MENU))
+        self.notebook.append_page(self.page2,Gtk.Label('Wifi'))
 
-    def on_button_toggled(self, button, name):
-        if button.get_active():
-            state = "on"
-        else:
-            state = "off"
-        print("Button", name, "was turned", state)
+        self.page3 = Gtk.Box()
+        self.page3.set_border_width(10)
+        self.notebook.append_page(self.page3,Gtk.Label('About'))
+        self.page3.add(Gtk.Label('About'))
 
-        #self.notebook.append_page(self.page1, Gtk.Label('Nvidia GPU'))
 
-win = MainWindow() # makes window
-win.connect("delete-event", Gtk.main_quit) #delete event to ensure that the application is terminated if we click on the x to close the window.
-win.show_all() # display window
-Gtk.main() #start the GTK+ processing loop which we quit when the window is closed
+win = Start_Window()
+win.show_all()
+Gtk.main()
